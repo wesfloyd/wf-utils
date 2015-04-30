@@ -29,7 +29,7 @@ Get number of tuples processed by bolt
 https://github.com/apache/storm/blob/0.9.3-branch/STORM-UI-REST-API.md
 
 
-test1
+test2
 '''
 
 
