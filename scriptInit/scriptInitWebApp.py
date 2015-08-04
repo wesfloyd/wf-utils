@@ -1,29 +1,68 @@
 import os, os.path
 import random
 import string
+import subprocess
+from subprocess import call
 import cherrypy
+
+
+#######################################################
+# Define custom scripts in the action** functions below
+#######################################################
+
+def actionDVS():
+    return 'time date'
+
+def actionSearch():
+    return 'echo "hello World Search"'
+
+def actionSC():
+    return 'echo "hello World SC"'
+
+
 
 class DemoInit(object):
     @cherrypy.expose
     def index(self):
+        log('WF Debug: in DemoInit get method')
         return open('index.html')
 
-    @cherrypy.expose
-    def generateDVS(self):
-        return 'went to DVS page'
+class GenerateService(object):
+    exposed = True
 
-# CSS http://scache.vzw.com/globalnav/css/globalnav-js.cbfdb61acd.css
-    
+    @cherrypy.tools.accept(media='text/plain')
+    def GET(self, module):
+
+        if module == 'dvs':
+            log('Executing DVS Command')
+            executeLocalCommand(actionDVS())
+        elif module == 'search':
+            log('Executting search command')
+            executeLocalCommand(actionSearch())
+        elif module == 'sc':
+            log('Executing sitecatalyst command')
+            executeLocalCommand(actionSC())
+        else:
+            log('module value ' + module + ' not recognized')
+
+
+def log(str):
+    print "DEBUG: " + str
+
+def executeLocalCommand(cmdVar):
+    log('Executing command:' + cmdVar)
+    subprocess.call(cmdVar.split(" "))
+
 
 if __name__ == '__main__':
     
-    webapp = DemoInit()
+    
     conf = {
          '/': {
              'tools.sessions.on': True,
              'tools.staticdir.root': os.path.abspath(os.getcwd())
          },
-         '/generator': {
+         '/generate': {
              'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
              'tools.response_headers.on': True,
              'tools.response_headers.headers': [('Content-Type', 'text/plain')],
@@ -33,5 +72,7 @@ if __name__ == '__main__':
              'tools.staticdir.dir': './public'
          }
     }
-    cherrypy.config.update({'server.socket_port': 10005})
+    cherrypy.config.update({'server.socket_port': 10005, 'log.screen': False,'server.socket_host': '127.0.0.1'})
+    webapp = DemoInit()
+    webapp.generate = GenerateService()
     cherrypy.quickstart(webapp, '/', conf)

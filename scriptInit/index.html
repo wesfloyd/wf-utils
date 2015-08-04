@@ -2,29 +2,59 @@
   <head>
     <link href="/static/css/style.css" rel="stylesheet">
     <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+     <script type="text/javascript">
+        $(document).ready(function() {
+
+            $("#generateDVS").click(function(e) {
+                $(this).prop("disabled",true);
+                $('#dvsID').append('<p style="padding-left:5em;font-style: italic">DVS Event Generation Submitted</p>');
+                $.get("/generate?module=dvs")
+                 .done(function(string) {
+                    $('#dvsID').append('<p style="padding-left:5em;font-style: italic">DVS Event Generation Complete</p>');        
+                });
+               e.preventDefault();
+             });
+
+            $("#generateSC").click(function(e) {
+                $(this).prop("disabled",true);
+                $('#scID').append('<p style="padding-left:5em;font-style: italic">SiteCatalyst Event Generation Submitted</p>');
+                $.get("/generate?module=sc")
+                 .done(function(string) {
+                    $('#scID').append('<p style="padding-left:5em;font-style: italic">SiteCatalyst Event Generation Complete</p>');        
+                });
+               e.preventDefault();
+             });
+
+            $("#generateSearch").click(function(e) {
+                $(this).prop("disabled",true);
+                $('#searchID').append('<p style="padding-left:5em;font-style: italic">Search Event Generation Submitted</p>');
+                $.get("/generate?module=search")
+                 .done(function(string) {
+                    $('#searchID').append('<p style="padding-left:5em;font-style: italic">Search Event Generation Complete</p>');        
+                });
+               e.preventDefault();
+             });
+
+
+        });
+     </script>
   </head>
   <body>
-    <p>VerizonWireless Streaming Event Generator</p>
+    <h1>VerizonWireless Streaming Event Generator</h1>
     <br>
-    <div>
-        <p>Initialize DVS Event Generator</p>
-        <form method="get" action="generateDVS">
-            <button type="submit">Submit</button>
-        </form>
+    <div id='dvsID'>
+        <p style="font-size:125%">Initialize DVS Event Generator</p>
+        <p><button id="generateDVS">Submit</button>
     </div>
     <br>
-    <div>
-        <p>Initialize SiteCatalyst Event Generator</p>
-        <form method="get" action="generateDVS">
-            <button type="submit">Submit</button>
-        </form>
+    <div id='scID'>
+        <p style="font-size:125%">Initialize SiteCatalyst Event Generator</p>
+        <button id="generateSC">Submit</button>
     </div>
     <br>
-    <div>
-        <p>Initialize DVS Event Generator</p>
-        <form method="get" action="generateDVS">
-            <button type="submit">Submit</button>
-        </form>
+    <div id='searchID'>
+        <p style="font-size:125%">Initialize Search Event Generator</p>
+        <button id="generateSearch">Submit</button>
     </div>
   </body>
 </html>
