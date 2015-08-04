@@ -52,6 +52,7 @@ def log(str):
 def executeLocalCommand(cmdVar):
     log('Executing command:' + cmdVar)
     subprocess.call(cmdVar.split(" "))
+    # consider modifying the split() method to use Regex - http://stackoverflow.com/questions/1059559/python-split-strings-with-multiple-delimiters
 
 
 if __name__ == '__main__':
